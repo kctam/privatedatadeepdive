@@ -57,6 +57,8 @@ func (t *SimpleAsset) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		result, err = setPrivateTransient(stub, args)
 	} else if fn == "getPrivate" {
 		result, err = getPrivate(stub, args)
+	} else if fn == "getPrivateOrg1" {
+		result, err = getPrivateOrg1(stub, args)
 	} else { // assume 'get' even if fn is nil
 		result, err = get(stub, args)
 	}
@@ -164,6 +166,21 @@ func getPrivate(stub shim.ChaincodeStubInterface, args []string) (string, error)
 	}
 
 	value, err := stub.GetPrivateData("demo", args[0])
+	if err != nil {
+		return "", fmt.Errorf("Failed to get asset: %s with error: %s", args[0], err)
+	}
+	if value == nil {
+		return "", fmt.Errorf("Asset not found: %s", args[0])
+	}
+	return string(value), nil
+}
+
+func getPrivateOrg1(stub shim.ChaincodeStubInterface, args []string) (string, error) {
+	if len(args) != 1 {
+		return "", fmt.Errorf("Incorrect arguments. Expecting a key")
+	}
+
+	value, err := stub.GetPrivateData("_implicit_org_Org1", args[0])
 	if err != nil {
 		return "", fmt.Errorf("Failed to get asset: %s with error: %s", args[0], err)
 	}
