@@ -180,7 +180,7 @@ func getPrivateOrg1(stub shim.ChaincodeStubInterface, args []string) (string, er
 		return "", fmt.Errorf("Incorrect arguments. Expecting a key")
 	}
 
-	value, err := stub.GetPrivateData("_implicit_org_Org1", args[0])
+	value, err := stub.GetPrivateData("_implicit_org_Org1MSP", args[0])
 	if err != nil {
 		return "", fmt.Errorf("Failed to get asset: %s with error: %s", args[0], err)
 	}
